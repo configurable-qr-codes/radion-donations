@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>radion donations</title>
+    <style>
+        /* hide everything */
+        html, body {
+            display: none
+        }
+    </style>
+    <script>
+        (async () => {
+            const url = new URL(location.href);
+            
+            // filename of the config file
+            const CONFIG_JSON_FILENAME = "config.json";
+            const CONFIG_JSON_URL = new URL(url);
+            
+            // first remove (the optional) `/index.html` suffix
+            CONFIG_JSON_URL.pathname = CONFIG_JSON_URL.pathname.replaceAll(/\/index.html$/g, "");
+            // remove trailing slashes
+            const baseUrl = CONFIG_JSON_URL.pathname = CONFIG_JSON_URL.pathname.replaceAll(/\/$/g, "");
+            
+            CONFIG_JSON_URL.pathname += "/config.json";
+            
+            // fetch the configuration
+            const config = await (await fetch(CONFIG_JSON_URL.toString())).json();
+            
+            // get the id from the query string,
+            // this tells us which specific QR code we scanned
+            const id = url.searchParams.get("id");
+            
+            // get the configuration for the specific QR code
+            const destination = config.urls[id];
+            
+            // if no destination is found in the configuration
+            // redirect to a 404 page
+            if (!destination || !destination.url) {
+                location.href = `${baseUrl}/404`;
+                return;
+            }
+            
+            // update page title if specified
+            if (destination.title) {
+                document.title = destination.title;
+            }
+            
+            // redirect to the destination URL for the QR code
+            location.href = destination.url;
+        })();
+    </script>
+</head>
+<body>
+
+</body>
+</html>
