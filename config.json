@@ -1,13 +1,16 @@
 {
   "urls": {
-    "sekjoeretie": {
+   	 "sekjoeretie": {
       "url": "https://www.ing.nl/particulier/betaalverzoek/index.html?trxid=DpACCBwakg5t8nwuinLIBW1R89kOydOQ"
-    },
-    "defik": {
-      "url": "https://betaalverzoek.rabobank.nl/betaalverzoek/?id=dVJHUZThRLyYmBCJwqxEGw"
 	},
-	"irmasplees": {
+   	 "defik": {
+      "url": "https://betaalverzoek.rabobank.nl/betaalverzoek/?id=dVJHUZThRLyYmBCJwqxEGw"
+    	},
+   	  "irmasplees": {
 		"url": "https://betaalverzoek.rabobank.nl/betaalverzoek/?id=7ayh2eQ1TkiPOAD3ZmDOLg"
 	}
+	  "simon-magic-hands": {
+		  "url: "https://tikkie.me/pay/ij993il5hmuij2n6fpmp"
+	  }
   }
 }
