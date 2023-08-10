@@ -45,6 +45,9 @@ jobs:
     - name: Deploy to GitHub Pages
       if: steps.validate.outcome == 'success'
       run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
         git checkout --orphan gh-pages
         git rm -rf . # Remove all files from the old working tree
         git checkout main -- . # Retrieve all files from the main branch
