@@ -53,4 +53,4 @@ jobs:
         git checkout main -- . # Retrieve all files from the main branch
         git add .
         git commit -m "Deploy ${{ github.sha }} to GitHub Pages"
-        git push origin gh-pages
+        git push origin gh-pages --force
