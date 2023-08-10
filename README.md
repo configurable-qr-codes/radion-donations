@@ -1,4 +1,4 @@
-# README.md for Radion Donations Redirect Configuration
+# Radion Donations Redirect Configuration
 
 ## Overview
 
