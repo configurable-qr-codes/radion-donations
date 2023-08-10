@@ -45,6 +45,9 @@ jobs:
     - name: Deploy to GitHub Pages
       if: steps.validate.outcome == 'success'
       run: |
-        git checkout -b gh-pages
+        git checkout --orphan gh-pages
+        git rm -rf . # Remove all files from the old working tree
+        git checkout main -- . # Retrieve all files from the main branch
+        git add .
+        git commit -m "Deploy ${{ github.sha }} to GitHub Pages"
         git push origin gh-pages
-
