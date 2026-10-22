@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Validate config.json
+      id: validate
+      run: npm run validate-config
+      continue-on-error: true
+
+    - name: File an issue if validation fails
+      if: steps.validate.outcome == 'failure'
+      run: |
+        ISSUE_TITLE="Validation failed for config.json"
+        ISSUE_BODY="The validation of \`config.json\` failed in commit ${{ github.sha }}. @${{ github.actor }}, please check the file. Error details:\n\`\`\`\n${{ steps.validate.outputs.stderr }}\n\`\`\`"
+        ISSUE_LABELS="bug"
+
+        gh issue create \
+          --title "$ISSUE_TITLE" \
+          --body "$ISSUE_BODY" \
+          --label "$ISSUE_LABELS"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy to GitHub Pages
+      if: steps.validate.outcome == 'success'
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+        git checkout --orphan gh-pages
+        git rm -rf . # Remove all files from the old working tree
+        git checkout main -- . # Retrieve all files from the main branch
+        git add .
+        git commit -m "Deploy ${{ github.sha }} to GitHub Pages"
+        git push origin gh-pages --force
